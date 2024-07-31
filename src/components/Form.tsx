@@ -32,6 +32,12 @@ export function Form() {
   const [loading, setLoading] = React.useState(false)
   const router = useRouter()
 
+  const loadingStates = [
+    { text: "Adding item to pantry..." },
+    { text: "Updating inventory..." },
+    { text: "Redirecting to items list..." },
+  ]
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -42,21 +48,15 @@ export function Form() {
         expirationDate,
         category,
       })
-      setTimeout(() => {
-        setLoading(false)
-        router.push('/items')
-      }, 3000) // Adjust this timeout to match your loading states duration
+      // Wait for 3 seconds to show the loading states
+      await new Promise(resolve => setTimeout(resolve, 3000))
     } catch (error) {
       console.error("Error adding document: ", error)
+    } finally {
       setLoading(false)
+      router.push('/items')
     }
   }
-
-  const loadingStates = [
-    { text: "Adding item to pantry..." },
-    { text: "Updating inventory..." },
-    { text: "Redirecting to items list..." },
-  ]
 
   return (
     <Card className="w-[350px] bg-transparent">
@@ -105,7 +105,7 @@ export function Form() {
       <MultiStepLoader 
         loadingStates={loadingStates} 
         loading={loading} 
-        duration={1000} 
+        duration={1000}
       />
     </Card>
   )

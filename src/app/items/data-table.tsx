@@ -103,32 +103,35 @@ export function DataTable<TData, TValue>({
                 size="sm"
                 onClick={() => setIsAlertOpen(true)}
                 disabled={!table.getIsAllPageRowsSelected() && !table.getIsSomePageRowsSelected()}
-                className="px-4 py-5"
+                className="ml-auto mr-2 px-4 py-5"
               >
                 Delete All Selected
               </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="bg-black border border-white">
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
+                <AlertDialogTitle className="text-white">Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription className="text-gray-300">
                   This action cannot be undone. This will permanently delete the selected items from your pantry.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => {
-                  handleDeleteAll();
-                  setIsAlertOpen(false);
-                }}>
-                  Continue
+                <AlertDialogCancel className="bg-transparent text-white border-white">Cancel</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={() => {
+                    handleDeleteAll();
+                    setIsAlertOpen(false);
+                  }}
+                  className="bg-red-600 text-white hover:bg-red-700"
+                >
+                  Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="ml-auto mr-2">
                 Columns
               </Button>
             </DropdownMenuTrigger>

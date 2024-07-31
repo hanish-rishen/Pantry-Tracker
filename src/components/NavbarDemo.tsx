@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export function NavbarDemo() {
   return (
-    <div className="w-full p-2 overflow-hidden">
+    <div className="w-full p-2">
       <Navbar />
     </div>
   );

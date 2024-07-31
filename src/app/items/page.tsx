@@ -17,9 +17,14 @@ async function getData(): Promise<PantryItem[]> {
 
 export default function ItemsPage() {
   const [data, setData] = useState<PantryItem[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getData().then(setData)
+    setLoading(true)
+    getData().then(fetchedData => {
+      setData(fetchedData)
+      setLoading(false)
+    })
   }, [])
 
   const handleDelete = async (id: string) => {
@@ -39,7 +44,11 @@ export default function ItemsPage() {
       <StarsBackground />
       <div className="container mx-auto py-10 mt-16 relative z-10">
         <h1 className="text-2xl font-bold mb-5 text-white">Pantry Items</h1>
-        <DataTable columns={tableColumns} data={data} handleDelete={handleDelete} />
+        {loading ? (
+          <div className="text-white">Loading...</div>
+        ) : (
+          <DataTable columns={tableColumns} data={data} handleDelete={handleDelete} />
+        )}
       </div>
     </div>
   )

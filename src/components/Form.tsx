@@ -30,6 +30,12 @@ export function Form() {
   const [expirationDate, setExpirationDate] = React.useState("")
   const [category, setCategory] = React.useState("")
   const [loading, setLoading] = React.useState(false)
+  const [errors, setErrors] = React.useState({
+    name: "",
+    quantity: "",
+    expirationDate: "",
+    category: ""
+  })
   const router = useRouter()
 
   const loadingStates = [
@@ -38,8 +44,38 @@ export function Form() {
     { text: "Redirecting to items list..." },
   ]
 
+  const validateInput = () => {
+    let isValid = true
+    const newErrors = { name: "", quantity: "", expirationDate: "", category: "" }
+
+    if (name.trim() === "") {
+      newErrors.name = "Name is required"
+      isValid = false
+    }
+
+    if (!/^\d+$/.test(quantity)) {
+      newErrors.quantity = "Quantity must be a positive integer"
+      isValid = false
+    }
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(expirationDate)) {
+      newErrors.expirationDate = "Invalid date format. Use YYYY-MM-DD"
+      isValid = false
+    }
+
+    if (category === "") {
+      newErrors.category = "Category is required"
+      isValid = false
+    }
+
+    setErrors(newErrors)
+    return isValid
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!validateInput()) return
+
     setLoading(true)
     try {
       await addDoc(collection(db, "pantryItems"), {
@@ -69,15 +105,35 @@ export function Form() {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label className="text-white font-bold" htmlFor="name">Name</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name of your product" />
+              <Input 
+                id="name" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+                placeholder="Name of your product" 
+              />
+              {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label className="text-white font-bold" htmlFor="quantity">Quantity</Label>
-              <Input id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="Quantity" type="number" />
+              <Input 
+                id="quantity" 
+                value={quantity} 
+                onChange={(e) => setQuantity(e.target.value)} 
+                placeholder="Quantity" 
+                type="number" 
+              />
+              {errors.quantity && <span className="text-red-500 text-sm">{errors.quantity}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label className="text-white font-bold" htmlFor="expirationDate">Expiration Date</Label>
-              <Input id="expirationDate" value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} placeholder="Expiration Date" type="date" />
+              <Input 
+                id="expirationDate" 
+                value={expirationDate} 
+                onChange={(e) => setExpirationDate(e.target.value)} 
+                placeholder="YYYY-MM-DD" 
+                type="date" 
+              />
+              {errors.expirationDate && <span className="text-red-500 text-sm">{errors.expirationDate}</span>}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label className="text-white font-bold" htmlFor="category">Category</Label>
@@ -94,6 +150,7 @@ export function Form() {
                   <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
+              {errors.category && <span className="text-red-500 text-sm">{errors.category}</span>}
             </div>
           </div>
           <CardFooter className="flex justify-between mt-4">

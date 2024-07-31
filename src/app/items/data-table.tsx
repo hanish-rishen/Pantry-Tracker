@@ -103,7 +103,7 @@ export function DataTable<TData, TValue>({
                 size="sm"
                 onClick={() => setIsAlertOpen(true)}
                 disabled={!table.getIsAllPageRowsSelected() && !table.getIsSomePageRowsSelected()}
-                className="ml-auto mr-2 px-4 py-5"
+                className="ml-2 px-3 py-5"
               >
                 Delete All Selected
               </Button>

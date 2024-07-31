@@ -47,7 +47,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   handleDelete: (id: string) => Promise<void>
-  handleDeleteAll: () => Promise<void>
+  handleDeleteAll: (selectedItems: string[]) => Promise<void>
 }
 
 export function DataTable<TData, TValue>({
@@ -119,7 +119,9 @@ export function DataTable<TData, TValue>({
                 <AlertDialogCancel className="bg-transparent text-white border-white">Cancel</AlertDialogCancel>
                 <AlertDialogAction 
                   onClick={() => {
-                    handleDeleteAll();
+                    const selectedRows = table.getFilteredSelectedRowModel().rows;
+                    const selectedIds = selectedRows.map(row => (row.original as { id: string }).id);
+                    handleDeleteAll(selectedIds);
                     setIsAlertOpen(false);
                   }}
                   className="bg-red-600 text-white hover:bg-red-700"

@@ -36,14 +36,14 @@ export default function ItemsPage() {
     }
   }
 
-  const handleDeleteAll = async () => {
+  const handleDeleteAll = async (selectedItems: string[]) => {
     setLoading(true)
     try {
-      const deletePromises = data.map(item => deleteDoc(doc(db, "pantryItems", item.id)))
+      const deletePromises = selectedItems.map(id => deleteDoc(doc(db, "pantryItems", id)))
       await Promise.all(deletePromises)
-      setData([])
+      setData(prevData => prevData.filter(item => !selectedItems.includes(item.id)))
     } catch (error) {
-      console.error("Error deleting all documents: ", error)
+      console.error("Error deleting selected documents: ", error)
     } finally {
       setLoading(false)
     }
@@ -60,7 +60,12 @@ export default function ItemsPage() {
         {loading ? (
           <div className="text-white">Loading...</div>
         ) : (
-          <DataTable columns={tableColumns} data={data} handleDelete={handleDelete} handleDeleteAll={handleDeleteAll} />
+          <DataTable 
+            columns={tableColumns} 
+            data={data} 
+            handleDelete={handleDelete} 
+            handleDeleteAll={handleDeleteAll}
+          />
         )}
       </div>
     </div>

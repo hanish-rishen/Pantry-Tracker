@@ -36,6 +36,19 @@ export default function ItemsPage() {
     }
   }
 
+  const handleDeleteAll = async () => {
+    setLoading(true)
+    try {
+      const deletePromises = data.map(item => deleteDoc(doc(db, "pantryItems", item.id)))
+      await Promise.all(deletePromises)
+      setData([])
+    } catch (error) {
+      console.error("Error deleting all documents: ", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const tableColumns = columns(handleDelete)
 
   return (
@@ -47,7 +60,7 @@ export default function ItemsPage() {
         {loading ? (
           <div className="text-white">Loading...</div>
         ) : (
-          <DataTable columns={tableColumns} data={data} handleDelete={handleDelete} />
+          <DataTable columns={tableColumns} data={data} handleDelete={handleDelete} handleDeleteAll={handleDeleteAll} />
         )}
       </div>
     </div>

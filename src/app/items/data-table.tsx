@@ -35,12 +35,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   handleDelete: (id: string) => Promise<void>
+  handleDeleteAll: () => Promise<void>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   handleDelete,
+  handleDeleteAll,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -80,9 +82,18 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm bg-transparent border border-white text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
         />
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={handleDeleteAll}
+          disabled={!table.getIsAllPageRowsSelected() && !table.getIsSomePageRowsSelected()}
+          className="ml-auto mr-2 px-4 py-5"
+        >
+          Delete All Selected
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="mr-2">
               Columns
             </Button>
           </DropdownMenuTrigger>

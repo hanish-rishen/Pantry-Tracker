@@ -42,15 +42,14 @@ export function Form() {
         expirationDate,
         category,
       })
+      setTimeout(() => {
+        setLoading(false)
+        router.push('/items')
+      }, 3000) // Adjust this timeout to match your loading states duration
     } catch (error) {
       console.error("Error adding document: ", error)
       setLoading(false)
     }
-  }
-
-  const handleLoaderComplete = () => {
-    setLoading(false)
-    router.push('/items')
   }
 
   const loadingStates = [
@@ -107,7 +106,6 @@ export function Form() {
         loadingStates={loadingStates} 
         loading={loading} 
         duration={1000} 
-        onComplete={handleLoaderComplete}
       />
     </Card>
   )

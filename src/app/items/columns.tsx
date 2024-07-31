@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button"
 
 export type PantryItem = {
   id: string
@@ -11,7 +12,7 @@ export type PantryItem = {
   category: string
 }
 
-export const columns: ColumnDef<PantryItem>[] = [
+export const columns = (handleDelete: (id: string) => Promise<void>): ColumnDef<PantryItem>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -53,5 +54,20 @@ export const columns: ColumnDef<PantryItem>[] = [
   {
     accessorKey: "category",
     header: "Category",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const item = row.original
+      return (
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => handleDelete(item.id)}
+        >
+          Delete
+        </Button>
+      )
+    },
   },
 ]
